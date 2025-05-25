@@ -26,7 +26,7 @@
 			"upgradePackages": "true"
 		},
 		"ghcr.io/devcontainers-extra/features/angular-cli:2": {}
-	}
+	},
 
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	// "features": {},
@@ -44,7 +44,27 @@
 	// "postCreateCommand": "cat /etc/os-release",
 
 	// Configure tool-specific properties.
-	// "customizations": {},
+	"customizations": {
+		"vscode": {
+			"python": {
+				"defaultInterpreterPath": "/app/.venv/bin/python"
+			},
+            "extensions": [
+                "ms-python.python",
+                "ms-toolsai.jupyter",
+                "ms-python.debugpy",
+                "streetsidesoftware.code-spell-checker",
+                "eamodio.gitlens",
+                "ms-python.isort",
+                "ms-python.python",
+                "ms-python.black-formatter",
+                "ms-python.flake8",
+                "GitHub.copilot",
+                "ms-azuretools.vscode-docker",
+                "njpwerner.autodocstring"
+            ]
+        }
+	}
 
 	// Uncomment to connect as an existing user other than the container default. More info: https://aka.ms/dev-containers-non-root.
 	// "remoteUser": "devcontainer"
