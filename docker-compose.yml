@@ -49,5 +49,16 @@ services:
 
     build:
       context: ./backend
+  
+  frontend:
+    image: '${DOCKER_IMAGE_FRONTEND?Variable not set}:${TAG-latest}'
+    restart: always
+    networks:
+      - default
+    build:
+      context: ./frontend
+      args:
+        - NODE_ENV=production
+
 volumes:
   app-db-data:

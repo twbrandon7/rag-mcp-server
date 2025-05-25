@@ -29,3 +29,12 @@ services:
     # TODO: remove once coverage is done locally
     volumes:
       - ./backend/htmlcov:/app/htmlcov
+
+  frontend:
+    restart: "no"
+    ports:
+      - "5173:80"
+    build:
+      context: ./frontend
+      args:
+        - NODE_ENV=development
