@@ -6,6 +6,7 @@ from pydantic import EmailStr
 from sqlalchemy import Column, Float, UniqueConstraint
 from sqlalchemy.dialects.postgresql import UUID, ARRAY
 from sqlmodel import Field, Relationship, SQLModel
+from pgvector.sqlalchemy import Vector
 
 
 # User related models
@@ -144,7 +145,7 @@ class Chunk(ChunkBase, table=True):
     url_id: uuid.UUID = Field(foreign_key="url.url_id", nullable=False)
     project_id: uuid.UUID = Field(foreign_key="project.project_id", nullable=False)
     embedding: Optional[list[float]] = Field(
-        sa_column=Column(ARRAY(Float), nullable=True),
+        sa_column=Column(Vector(384), nullable=False),
         default=None
     )
     created_at: datetime = Field(default_factory=datetime.now)

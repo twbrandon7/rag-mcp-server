@@ -8,6 +8,7 @@ Create Date: 2025-05-25 13:14:29.536769
 from alembic import op
 import sqlalchemy as sa
 import sqlmodel.sql.sqltypes
+from pgvector.sqlalchemy import Vector
 
 
 # revision identifiers, used by Alembic.
@@ -84,17 +85,12 @@ def upgrade():
         sa.Column('url_id', sa.UUID(), nullable=False),
         sa.Column('project_id', sa.UUID(), nullable=False),
         sa.Column('content', sa.Text(), nullable=False),
-        sa.Column('embedding', sa.ARRAY(sa.Float), nullable=True),
+        sa.Column('embedding', Vector(384), nullable=False),
         sa.Column('chunk_index', sa.Integer(), nullable=False),
         sa.Column('created_at', sa.DateTime(timezone=True), nullable=False),
         sa.ForeignKeyConstraint(['project_id'], ['project.project_id']),
         sa.ForeignKeyConstraint(['url_id'], ['url.url_id'], ondelete='CASCADE'),
         sa.PrimaryKeyConstraint('chunk_id')
-    )
-    
-    # Create vector column using pgvector
-    op.execute(
-        'ALTER TABLE chunk ALTER COLUMN embedding TYPE vector(1536) USING embedding::vector'
     )
     
     # Create HNSW index on chunks.embedding for efficient similarity search
