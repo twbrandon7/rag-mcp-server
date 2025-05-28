@@ -40,14 +40,14 @@
 	// Uncomment the next line if you want to keep your containers running after VS Code shuts down.
 	// "shutdownAction": "none",
 
-	// Uncomment the next line to run commands after the container is created.
-	// "postCreateCommand": "cat /etc/os-release",
-
+	// Run commands after the container is created
+	"postCreateCommand": "echo 'source /workspaces/rag-mcp-server/backend/.venv/bin/activate' >> ~/.bashrc && echo 'source /workspaces/rag-mcp-server/backend/.venv/bin/activate' >> ~/.zshrc",
+	
 	// Configure tool-specific properties.
 	"customizations": {
 		"vscode": {
 			"python": {
-				"defaultInterpreterPath": "/app/.venv/bin/python"
+				"defaultInterpreterPath": "/workspaces/rag-mcp-server/backend/.venv/bin/python"
 			},
             "extensions": [
                 "ms-python.python",
