@@ -93,11 +93,13 @@ backend/
    8. `utils.py` - non-business logic functions, e.g. response normalization, data enrichment, etc.
    9. `exceptions.py` - module specific exceptions, e.g. `ProjectNotFound`, `InvalidUserData`
 3. When package requires services or dependencies or constants from other packages - import them with an explicit module name
-```python
-from src.auth import constants as auth_constants
-from src.projects import service as projects_service
-from src.urls.constants import ErrorCode as UrlsErrorCode  # in case we have Standard ErrorCode in constants module of each package
-```
+    ```python
+    from src.auth import constants as auth_constants
+    from src.projects import service as projects_service
+    from src.urls.constants import ErrorCode as UrlsErrorCode  # in case we have Standard ErrorCode in constants module of each package
+    ```
+4. Each package should at least have a `router.py` and `schemas.py` files, so that it can define the endpoints and 
+    data models for the API. Other files are optional and can be added as needed.
 
 ## SQL-first. Pydantic-second
 - Usually, database handles data processing much faster and cleaner than CPython will ever do. 
