@@ -5,9 +5,9 @@ description = ""
 requires-python = ">=3.10,<4.0"
 dependencies = [
     "fastapi[standard]<1.0.0,>=0.114.2",
-    "python-multipart<1.0.0,>=0.0.7",
+    "python-multipart>=0.0.7,<1.0.0",
     "email-validator<3.0.0.0,>=2.1.0.post1",
-    "passlib[bcrypt]<2.0.0,>=1.7.4",
+    "passlib[bcrypt]>=1.7.4,<2.0.0",
     "tenacity<9.0.0,>=8.2.3",
     "pydantic>2.0",
     "emails<1.0,>=0.6",
@@ -22,6 +22,8 @@ dependencies = [
     "sentry-sdk[fastapi]<2.0.0,>=1.40.6",
     "pyjwt<3.0.0,>=2.8.0",
     "pgvector>=0.4.1",
+    # Auth dependencies
+    "python-jose[cryptography]>=3.3.0",
 ]
 
 [tool.uv]
@@ -67,3 +69,6 @@ ignore = [
 [tool.ruff.lint.pyupgrade]
 # Preserve types, even if a file imports `from __future__ import annotations`.
 keep-runtime-typing = true
+
+[tool.hatch.build.targets.wheel]
+packages = ["src"]
