@@ -27,7 +27,7 @@ The primary resource hierarchy follows this pattern:
 
 #### 1.1 Register User
 
-* **Endpoint**: `POST /users`
+* **Endpoint**: `POST /api/v1/users`
 * **Description**: Create a new user account with email and password.
 * **Request Body**:
 
@@ -52,7 +52,7 @@ The primary resource hierarchy follows this pattern:
 
 #### 1.2 Login (Email/Password)
 
-* **Endpoint**: `POST /auth/token`
+* **Endpoint**: `POST /api/v1/auth/token`
 * **Description**: Authenticate with email and password to obtain an access token.
 * **Request Body**:
 
@@ -76,7 +76,7 @@ The primary resource hierarchy follows this pattern:
 
 #### 1.3 Google OAuth Login
 
-* **Endpoint**: `POST /auth/google`
+* **Endpoint**: `POST /api/v1/auth/google`
 * **Description**: Complete Google OAuth flow by providing a token from Google. If an account with the same email already exists, the accounts will be automatically linked.
 * **Request Body**:
 
@@ -99,7 +99,7 @@ The primary resource hierarchy follows this pattern:
 
 #### 1.4 Microsoft OAuth Login
 
-* **Endpoint**: `POST /auth/microsoft`
+* **Endpoint**: `POST /api/v1/auth/microsoft`
 * **Description**: Complete Microsoft OAuth flow by providing a token from Microsoft. If an account with the same email already exists, the accounts will be automatically linked.
 * **Request Body**:
 
@@ -122,7 +122,7 @@ The primary resource hierarchy follows this pattern:
 
 #### 1.5 Get Current User
 
-* **Endpoint**: `GET /users/me`
+* **Endpoint**: `GET /api/v1/users/me`
 * **Description**: Get information about the currently authenticated user.
 * **Authorization**: Bearer Token Required
 * **Response** (200 OK):
@@ -141,7 +141,7 @@ The primary resource hierarchy follows this pattern:
 
 #### 2.1 Create Project
 
-* **Endpoint**: `POST /projects`
+* **Endpoint**: `POST /api/v1/projects`
 * **Description**: Create a new project for organizing URLs and vectors.
 * **Authorization**: Bearer Token Required
 * **Request Body**:
@@ -167,7 +167,7 @@ The primary resource hierarchy follows this pattern:
 
 #### 2.2 List Projects
 
-* **Endpoint**: `GET /projects`
+* **Endpoint**: `GET /api/v1/projects`
 * **Description**: Get all projects belonging to the authenticated user.
 * **Authorization**: Bearer Token Required
 * **Response** (200 OK):
@@ -193,7 +193,7 @@ The primary resource hierarchy follows this pattern:
 
 #### 2.3 Get Project
 
-* **Endpoint**: `GET /projects/{project_id}`
+* **Endpoint**: `GET /api/v1/projects/{project_id}`
 * **Description**: Get details of a specific project.
 * **Authorization**: Bearer Token Required
 * **Response** (200 OK):
@@ -211,7 +211,7 @@ The primary resource hierarchy follows this pattern:
 
 #### 2.4 Update Project
 
-* **Endpoint**: `PATCH /projects/{project_id}`
+* **Endpoint**: `PATCH /api/v1/projects/{project_id}`
 * **Description**: Update a project's details.
 * **Authorization**: Bearer Token Required
 * **Request Body**:
@@ -237,7 +237,7 @@ The primary resource hierarchy follows this pattern:
 
 #### 2.5 Delete Project
 
-* **Endpoint**: `DELETE /projects/{project_id}`
+* **Endpoint**: `DELETE /api/v1/projects/{project_id}`
 * **Description**: Delete a project and all its associated data.
 * **Authorization**: Bearer Token Required
 * **Response** (204 No Content)
@@ -248,7 +248,7 @@ The primary resource hierarchy follows this pattern:
 
 #### 3.1 Submit Single URL
 
-* **Endpoint**: `POST /projects/{project_id}/urls`
+* **Endpoint**: `POST /api/v1/projects/{project_id}/urls`
 * **Description**: Submit a single URL for processing within a project. If the URL is already processed in this project, a 409 Conflict response will be returned with details of the existing URL entry.
 * **Authorization**: Bearer Token Required
 * **Request Body**:
@@ -294,7 +294,7 @@ The primary resource hierarchy follows this pattern:
 
 #### 3.2 Submit Multiple URLs
 
-* **Endpoint**: `POST /projects/{project_id}/urls:batch`
+* **Endpoint**: `POST /api/v1/projects/{project_id}/urls:batch`
 * **Description**: Submit multiple URLs for processing within a project. Duplicate URLs will be filtered out and returned separately in the response.
 * **Authorization**: Bearer Token Required
 * **Request Body**:
@@ -360,7 +360,7 @@ The primary resource hierarchy follows this pattern:
 
 #### 3.3 Get URLs in Project
 
-* **Endpoint**: `GET /projects/{project_id}/urls`
+* **Endpoint**: `GET /api/v1/projects/{project_id}/urls`
 * **Description**: Get all URLs associated with a project.
 * **Authorization**: Bearer Token Required
 * **Query Parameters**:
@@ -394,7 +394,7 @@ The primary resource hierarchy follows this pattern:
 
 #### 3.4 Get URL Status
 
-* **Endpoint**: `GET /projects/{project_id}/urls/{url_id}`
+* **Endpoint**: `GET /api/v1/projects/{project_id}/urls/{url_id}`
 * **Description**: Get details and processing status of a specific URL.
 * **Authorization**: Bearer Token Required
 * **Response** (200 OK):
@@ -417,7 +417,7 @@ The primary resource hierarchy follows this pattern:
 
 #### 4.1 Get Content Chunks for URL
 
-* **Endpoint**: `GET /projects/{project_id}/urls/{url_id}/chunks`
+* **Endpoint**: `GET /api/v1/projects/{project_id}/urls/{url_id}/chunks`
 * **Description**: Retrieve the content chunks associated with a processed URL.
 * **Authorization**: Bearer Token Required
 * **Query Parameters**:
@@ -451,7 +451,7 @@ The primary resource hierarchy follows this pattern:
 
 #### 4.2 Get Transformer Model Information
 
-* **Endpoint**: `GET /system/transformer-model`
+* **Endpoint**: `GET /api/v1/system/transformer-model`
 * **Description**: Retrieve information about the transformer model used for vectorization.
 * **Authorization**: Bearer Token Required
 * **Response** (200 OK):
@@ -477,7 +477,7 @@ The primary resource hierarchy follows this pattern:
 
 #### 5.1 Create Project Share
 
-* **Endpoint**: `POST /projects/{project_id}/shares`
+* **Endpoint**: `POST /api/v1/projects/{project_id}/shares`
 * **Description**: Share a project with another user or generate a sharing token.
 * **Authorization**: Bearer Token Required
 
@@ -525,7 +525,7 @@ The primary resource hierarchy follows this pattern:
 
 #### 5.2 List Project Shares
 
-* **Endpoint**: `GET /projects/{project_id}/shares`
+* **Endpoint**: `GET /api/v1/projects/{project_id}/shares`
 * **Description**: List all shares for a specific project.
 * **Authorization**: Bearer Token Required
 * **Response** (200 OK):
@@ -555,7 +555,7 @@ The primary resource hierarchy follows this pattern:
 
 #### 5.3 Delete Project Share
 
-* **Endpoint**: `DELETE /projects/{project_id}/shares/{share_id}`
+* **Endpoint**: `DELETE /api/v1/projects/{project_id}/shares/{share_id}`
 * **Description**: Remove a specific share from a project.
 * **Authorization**: Bearer Token Required
 * **Response** (204 No Content)
@@ -564,7 +564,7 @@ The primary resource hierarchy follows this pattern:
 
 #### 5.4 Access Shared Project
 
-* **Endpoint**: `GET /shared-projects/{token}`
+* **Endpoint**: `GET /api/v1/shared-projects/{token}`
 * **Description**: Access a project using a share token.
 * **Response** (200 OK):
 
@@ -580,7 +580,7 @@ The primary resource hierarchy follows this pattern:
 
 #### 5.5 List Shared Projects
 
-* **Endpoint**: `GET /users/me/shared-projects`
+* **Endpoint**: `GET /api/v1/users/me/shared-projects`
 * **Description**: List all projects shared with the authenticated user.
 * **Authorization**: Bearer Token Required
 * **Response** (200 OK):
@@ -604,7 +604,7 @@ The primary resource hierarchy follows this pattern:
 
 #### 6.1 Query Content (MCP Endpoint)
 
-* **Endpoint**: `POST /projects:query`
+* **Endpoint**: `POST /api/v1/projects:query`
 * **Description**: Query content from one or more projects using semantic similarity.
 * **Authorization**: Bearer Token Required
 * **Request Body**:
@@ -647,7 +647,7 @@ The primary resource hierarchy follows this pattern:
 
 #### 7.1 Get System Status
 
-* **Endpoint**: `GET /system/status`
+* **Endpoint**: `GET /api/v1/system/status`
 * **Description**: Retrieve the current system status including processing queue information.
 * **Authorization**: Bearer Token Required
 * **Response** (200 OK):
@@ -673,7 +673,7 @@ The primary resource hierarchy follows this pattern:
 
 #### 7.2 Reprocess URL
 
-* **Endpoint**: `POST /projects/{project_id}/urls/{url_id}:reprocess`
+* **Endpoint**: `POST /api/v1/projects/{project_id}/urls/{url_id}:reprocess`
 * **Description**: Request reprocessing of a previously processed URL.
 * **Authorization**: Bearer Token Required
 * **Request Body**: Empty
