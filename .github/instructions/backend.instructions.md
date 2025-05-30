@@ -14,26 +14,41 @@ backend/
 │   │   ├── models.py  # db models
 │   │   ├── dependencies.py
 │   │   ├── config.py  # local configs
-│   │   ├── constants.py
+│   │   ├── constants.py  # module specific constants and error codes
 │   │   ├── exceptions.py
 │   │   ├── service.py
 │   │   └── utils.py
+│   ├── users
+│   │   ├── router.py
+│   │   ├── schemas.py
+│   │   ├── ...
+│   ├── projects
+│   │   ├── router.py
+│   │   ├── schemas.py
+│   │   ├── ...
+│   ├── urls
+│   │   ├── router.py
+│   │   ├── schemas.py
+│   │   ├── ...
+│   ├── chunks
+│   │   ├── router.py
+│   │   ├── schemas.py
+│   │   ├── ...
+│   ├── shares
+│   │   ├── router.py
+│   │   ├── ...
+│   ├── vectorization
+│   │   ├── router.py
+│   │   ├── schemas.py
+│   │   ├── ...
+│   ├── system
+│   │   ├── router.py
+│   │   ├── schemas.py
+│   │   ├── ...
 │   ├── aws
 │   │   ├── client.py  # client model for external service communication
 │   │   ├── schemas.py
-│   │   ├── config.py
-│   │   ├── constants.py
-│   │   ├── exceptions.py
-│   │   └── utils.py
-│   └── posts
-│   │   ├── router.py
-│   │   ├── schemas.py
-│   │   ├── models.py
-│   │   ├── dependencies.py
-│   │   ├── constants.py
-│   │   ├── exceptions.py
-│   │   ├── service.py
-│   │   └── utils.py
+│   │   ├── ...
 │   ├── config.py  # global configs
 │   ├── models.py  # global models
 │   ├── exceptions.py  # global exceptions
@@ -42,8 +57,14 @@ backend/
 │   └── main.py
 ├── tests/
 │   ├── auth
-│   ├── aws
-│   └── posts
+│   ├── users
+│   ├── projects
+│   ├── urls
+│   ├── chunks
+│   ├── shares
+│   ├── vectorization
+│   ├── system
+│   └── aws
 ├── scripts/
 │   ├── format.sh
 │   ├── lint.sh
@@ -70,10 +91,10 @@ backend/
    6. `constants.py` - module specific constants and error codes
    7. `config.py` - e.g. env vars
    8. `utils.py` - non-business logic functions, e.g. response normalization, data enrichment, etc.
-   9. `exceptions.py` - module specific exceptions, e.g. `PostNotFound`, `InvalidUserData`
+   9. `exceptions.py` - module specific exceptions, e.g. `ProjectNotFound`, `InvalidUserData`
 3. When package requires services or dependencies or constants from other packages - import them with an explicit module name
 ```python
 from src.auth import constants as auth_constants
-from src.notifications import service as notification_service
-from src.posts.constants import ErrorCode as PostsErrorCode  # in case we have Standard ErrorCode in constants module of each package
+from src.projects import service as projects_service
+from src.urls.constants import ErrorCode as UrlsErrorCode  # in case we have Standard ErrorCode in constants module of each package
 ```
