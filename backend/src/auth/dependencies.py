@@ -5,6 +5,7 @@ from uuid import UUID
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from sqlmodel import Session, select
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.auth.exceptions import InvalidTokenException, UserNotFoundException
 from src.auth.schemas import TokenData
@@ -15,18 +16,18 @@ from src.models import User
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="api/v1/auth/token")
 
 
-async def get_db() -> AsyncGenerator[Session, None]:
+async def get_db() -> AsyncGenerator[AsyncSession, None]:
     """Get database session."""
-    async with Session(engine) as session:
+    async with AsyncSession(engine) as session:
         try:
             yield session
         finally:
-            await session.close()
+            pass  # AsyncSession automatically closes in the async context manager
 
 
 async def get_current_user(
     token: Annotated[str, Depends(oauth2_scheme)],
-    session: Annotated[Session, Depends(get_db)]
+    session: Annotated[AsyncSession, Depends(get_db)]
 ) -> User:
     """Get the current user from JWT token."""
     # Decode the JWT token
@@ -44,8 +45,8 @@ async def get_current_user(
         raise InvalidTokenException()
     
     statement = select(User).where(User.user_id == uuid_obj)
-    result = await session.exec(statement)
-    user = result.first()
+    result = await session.execute(statement)
+    user = result.scalars().first()
     
     if not user:
         raise UserNotFoundException()
@@ -55,7 +56,7 @@ async def get_current_user(
 
 async def get_optional_current_user(
     token: str = Depends(oauth2_scheme),
-    session: Session = Depends(get_db)
+    session: AsyncSession = Depends(get_db)
 ) -> Optional[User]:
     """Get the current user, or None if not authenticated."""
     try:

@@ -4,6 +4,7 @@ from typing import Annotated
 from fastapi import APIRouter, Depends, status
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlmodel import Session
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.auth.dependencies import get_current_user, get_db
 from src.auth.exceptions import InvalidCredentialsException
@@ -17,7 +18,7 @@ router = APIRouter()
 @router.post("/token", response_model=Token)
 async def login_for_access_token(
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
-    session: Annotated[Session, Depends(get_db)]
+    session: Annotated[AsyncSession, Depends(get_db)]
 ) -> Token:
     """Login with email and password to get access token."""
     credentials = LoginCredentials(
@@ -37,7 +38,7 @@ async def login_for_access_token(
 @router.post("/google", response_model=Token)
 async def login_with_google(
     oauth_data: OAuthRequest,
-    session: Annotated[Session, Depends(get_db)]
+    session: Annotated[AsyncSession, Depends(get_db)]
 ) -> Token:
     """Login with Google OAuth token."""
     # In a real implementation, you'd validate the token with Google's API
@@ -67,7 +68,7 @@ async def login_with_google(
 @router.post("/microsoft", response_model=Token)
 async def login_with_microsoft(
     oauth_data: OAuthRequest,
-    session: Annotated[Session, Depends(get_db)]
+    session: Annotated[AsyncSession, Depends(get_db)]
 ) -> Token:
     """Login with Microsoft OAuth token."""
     # In a real implementation, you'd validate the token with Microsoft's API

@@ -3,6 +3,7 @@ from typing import Annotated
 
 from fastapi import APIRouter, Depends, status
 from sqlmodel import Session
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.auth.dependencies import get_current_user, get_db
 from src.models import User
@@ -15,7 +16,7 @@ router = APIRouter()
 @router.post("", status_code=status.HTTP_201_CREATED, response_model=UserResponse)
 async def register_user(
     user_data: UserCreate,
-    session: Annotated[Session, Depends(get_db)]
+    session: Annotated[AsyncSession, Depends(get_db)]
 ) -> UserResponse:
     """Register a new user."""
     user = await create_user(session, user_data)

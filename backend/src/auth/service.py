@@ -3,6 +3,7 @@ from datetime import timedelta
 from typing import Optional
 
 from sqlmodel import Session, select
+from sqlalchemy.ext.asyncio import AsyncSession
 from passlib.context import CryptContext
 
 from src.auth.constants import ErrorCode
@@ -13,13 +14,13 @@ from src.models import User, UserCreate
 
 
 async def authenticate_user(
-    session: Session, credentials: LoginCredentials
+    session: AsyncSession, credentials: LoginCredentials
 ) -> Optional[User]:
     """Authenticate a user with email and password."""
     # Find the user by email
     statement = select(User).where(User.email == credentials.email)
-    result = await session.exec(statement)
-    user = result.first()
+    result = await session.execute(statement)
+    user = result.scalars().first()
     
     # Check if user exists and password is correct
     if not user or not user.password_hash:
@@ -42,7 +43,7 @@ async def create_user_token(user: User) -> Token:
 
 
 async def validate_oauth_token(
-    session: Session, 
+    session: AsyncSession, 
     oauth_provider: str, 
     token: str, 
     email: str,
@@ -60,8 +61,8 @@ async def validate_oauth_token(
     """
     # Check if user with this email already exists
     statement = select(User).where(User.email == email)
-    result = await session.exec(statement)
-    user = result.first()
+    result = await session.execute(statement)
+    user = result.scalars().first()
     
     if user:
         # Update the user with provider ID if needed
