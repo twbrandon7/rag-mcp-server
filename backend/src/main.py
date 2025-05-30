@@ -1,5 +1,7 @@
 import sentry_sdk
 from fastapi import FastAPI
+from fastapi.middleware.httpsredirect import HTTPSRedirectMiddleware
+from fastapi.middleware.trustedhost import TrustedHostMiddleware
 from fastapi.routing import APIRoute
 from starlette.middleware.cors import CORSMiddleware
 
@@ -16,9 +18,22 @@ if settings.SENTRY_DSN and settings.ENVIRONMENT != "local":
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
+    description="Web Content Vectorization Service API",
+    version="1.0.0",
     openapi_url=f"{settings.API_V1_STR}/openapi.json",
     generate_unique_id_function=custom_generate_unique_id,
 )
+
+# Set security middlewares for production environments
+if settings.ENVIRONMENT == "production":
+    # Force HTTPS in production
+    app.add_middleware(HTTPSRedirectMiddleware)
+    
+    # Validate host headers to prevent Host header attacks
+    app.add_middleware(
+        TrustedHostMiddleware, 
+        allowed_hosts=["api.example.com", "*.example.com"]
+    )
 
 # Set all CORS enabled origins
 if settings.all_cors_origins:
