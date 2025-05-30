@@ -2,7 +2,6 @@ import uuid
 from datetime import datetime
 from typing import List, Optional
 
-from pydantic import EmailStr
 from sqlalchemy import Column, Float, UniqueConstraint
 from sqlalchemy.dialects.postgresql import UUID, ARRAY
 from sqlmodel import Field, Relationship, SQLModel
