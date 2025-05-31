@@ -24,6 +24,8 @@ class UserUpdate(SQLModel):
 
 # Database model for users table
 class User(UserBase, table=True):
+    __tablename__ = "users"
+    
     user_id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     password_hash: Optional[str] = Field(default=None, max_length=255)
     google_id: Optional[str] = Field(default=None, max_length=255, unique=True)
@@ -49,8 +51,10 @@ class ProjectUpdate(SQLModel):
 
 # Database model for projects table
 class Project(ProjectBase, table=True):
+    __tablename__ = "projects"
+    
     project_id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
-    user_id: uuid.UUID = Field(foreign_key="user.user_id", nullable=False)
+    user_id: uuid.UUID = Field(foreign_key="users.user_id", nullable=False)
     created_at: datetime = Field(default_factory=datetime.now)
     
     # Relationships
@@ -79,9 +83,11 @@ class SharedProjectUpdate(SQLModel):
 
 # Database model for shared_projects table
 class SharedProject(SharedProjectBase, table=True):
+    __tablename__ = "shared_projects"
+    
     shared_project_id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
-    project_id: uuid.UUID = Field(foreign_key="project.project_id", nullable=False)
-    shared_with_user_id: Optional[uuid.UUID] = Field(default=None, foreign_key="user.user_id")
+    project_id: uuid.UUID = Field(foreign_key="projects.project_id", nullable=False)
+    shared_with_user_id: Optional[uuid.UUID] = Field(default=None, foreign_key="users.user_id")
     created_at: datetime = Field(default_factory=datetime.now)
     
     # Relationships
@@ -106,8 +112,10 @@ class URLUpdate(SQLModel):
 
 # Database model for urls table
 class URL(URLBase, table=True):
+    __tablename__ = "urls"
+    
     url_id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
-    project_id: uuid.UUID = Field(foreign_key="project.project_id", nullable=False)
+    project_id: uuid.UUID = Field(foreign_key="projects.project_id", nullable=False)
     submitted_at: datetime = Field(default_factory=datetime.now)
     last_updated_at: datetime = Field(default_factory=datetime.now)
     
@@ -140,9 +148,11 @@ class ChunkUpdate(SQLModel):
 
 # Database model for chunks table
 class Chunk(ChunkBase, table=True):
+    __tablename__ = "chunks"
+    
     chunk_id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
-    url_id: uuid.UUID = Field(foreign_key="url.url_id", nullable=False)
-    project_id: uuid.UUID = Field(foreign_key="project.project_id", nullable=False)
+    url_id: uuid.UUID = Field(foreign_key="urls.url_id", nullable=False)
+    project_id: uuid.UUID = Field(foreign_key="projects.project_id", nullable=False)
     embedding: Optional[list[float]] = Field(
         sa_column=Column(Vector(384), nullable=False),
         default=None
