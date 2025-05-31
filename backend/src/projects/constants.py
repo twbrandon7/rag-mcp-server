@@ -1,0 +1,5 @@
+class ErrorCode:
+    """Error codes for project-related errors."""
+    PROJECT_NOT_FOUND = "PROJECT_NOT_FOUND"
+    DUPLICATE_PROJECT_NAME = "DUPLICATE_PROJECT_NAME"
+    UNAUTHORIZED_ACCESS = "UNAUTHORIZED_ACCESS"
