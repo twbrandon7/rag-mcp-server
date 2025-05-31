@@ -1,0 +1,1 @@
+# Initialize projects tests module
