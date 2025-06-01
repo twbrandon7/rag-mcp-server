@@ -202,6 +202,7 @@ class ChunkResponse(SQLModel):
     content: str
     chunk_index: int
     created_at: datetime
+    embedding: Optional[List[float]] = Field(default=None, description="Vector embedding (only included if requested)")
 
 
 # Generic message and token models
