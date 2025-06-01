@@ -19,6 +19,50 @@ From `./backend/` you can install all the dependencies with:
 $ uv sync
 ```
 
+## URL Management Features
+
+The API provides the following URL management endpoints:
+
+### Submit a Single URL
+
+```http
+POST /api/v1/projects/{project_id}/urls
+```
+
+Submit a single URL for processing within a project. If the URL is already processed in this project, a 409 Conflict response will be returned.
+
+### Submit Multiple URLs
+
+```http
+POST /api/v1/projects/{project_id}/urls:batch
+```
+
+Submit multiple URLs at once for processing within a project. Duplicate URLs will be filtered out and returned separately in the response.
+
+### Get URLs in Project
+
+```http
+GET /api/v1/projects/{project_id}/urls?status={status}
+```
+
+Get all URLs associated with a project. Optionally filter by status (pending, crawling, encoding, stored, failed).
+
+### Get URL Status
+
+```http
+GET /api/v1/projects/{project_id}/urls/{url_id}
+```
+
+Get details and processing status of a specific URL.
+
+### Reprocess URL
+
+```http
+POST /api/v1/projects/{project_id}/urls/{url_id}:reprocess
+```
+
+Request reprocessing of a previously processed URL. This will reset the URL status to 'pending' and clear any failure reason.
+
 Then you can activate the virtual environment with:
 
 ```console
