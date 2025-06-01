@@ -449,25 +449,35 @@ The primary resource hierarchy follows this pattern:
 
 ---
 
-#### 4.2 Get Transformer Model Information
-
-* **Endpoint**: `GET /api/v1/system/transformer-model`
-* **Description**: Retrieve information about the transformer model used for vectorization.
+#### 4.2 Perform Query on Content Chunks
+* **Endpoint**: `POST /api/v1/projects/{project_id}/urls/{url_id}/chunks:query`
+* **Description**: Perform a semantic similarity query on the content chunks of a specific URL.
 * **Authorization**: Bearer Token Required
+* **Request Body**:
+
+```json
+{
+  "query": "What are the main advantages of vector databases?",
+  "top_k": 5
+}
+```
 * **Response** (200 OK):
 
 ```json
 {
-  "model_name": "all-MiniLM-L6-v2",
-  "embedding_size": 384,
-  "max_sequence_length": 256,
-  "chunking_strategy": "text_splitting",
-  "chunk_size": 512,
-  "chunk_overlap": 50,
-  "configuration": {
-    "normalize_embeddings": true
-  },
-  "version": "1.0.0"
+  "results": [
+    {
+      "chunk_id": "550e8400-e29b-41d4-a716-446655440000",
+      "content": "Vector databases offer several advantages over traditional databases. First, they enable similarity search, allowing you to find content that is semantically similar rather than just exact matches. Second, they are optimized for the high-dimensional vectors produced by modern embedding models...",
+      "similarity_score": 0.92
+    },
+    {
+      "chunk_id": "661e8400-e29b-41d4-a716-446655440000",
+      "content": "One of the key benefits of vector databases is their performance when dealing with large-scale similarity searches. Traditional databases struggle with the 'curse of dimensionality', but specialized vector databases implement algorithms like HNSW or IVF that make these searches practical...",
+      "similarity_score": 0.87
+    }
+    // Additional results...
+  ]
 }
 ```
 
