@@ -32,9 +32,6 @@ async_test_session = sessionmaker(
 # Session fixture
 @pytest_asyncio.fixture
 async def db_session() -> AsyncGenerator[AsyncSession, None]:
-    # Import the models here to ensure they're registered with SQLModel
-    from src.models import User, Project, SharedProject
-    
     # Create tables
     async with test_engine.begin() as conn:
         await conn.run_sync(SQLModel.metadata.create_all)
@@ -44,15 +41,16 @@ async def db_session() -> AsyncGenerator[AsyncSession, None]:
         try:
             yield session
         finally:
-            await session.close()
+            pass
     
     # Drop tables
     async with test_engine.begin() as conn:
         await conn.run_sync(SQLModel.metadata.drop_all)
 
 
-# Override get_db dependency
+# Override get_db dependency to use test engine
 async def override_get_db() -> AsyncGenerator[AsyncSession, None]:
+    """Override database dependency for tests."""
     async with async_test_session() as session:
         try:
             yield session
@@ -72,7 +70,7 @@ def app_with_db_dependency():
 @pytest_asyncio.fixture
 async def setup_db():
     # Import the models here to ensure they're registered with SQLModel
-    from src.models import User, Project, SharedProject
+    from src.models import User, Project, SharedProject, URL, Chunk
     
     # Create tables
     async with test_engine.begin() as conn:
