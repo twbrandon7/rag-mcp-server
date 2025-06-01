@@ -93,3 +93,72 @@ async def client(app_with_db_dependency, setup_db) -> AsyncGenerator[AsyncClient
 
 # We will use pytest-asyncio's event_loop fixture instead
 # Don't define our own to avoid deprecation warning
+
+# Test fixtures for users and projects
+@pytest_asyncio.fixture
+async def sample_user(db_session: AsyncSession):
+    """Create a sample user for testing"""
+    from src.models import User
+    from src.auth.utils import get_password_hash
+    
+    user = User(
+        email="test@example.com",
+        password_hash=get_password_hash("testpassword123")
+    )
+    db_session.add(user)
+    await db_session.commit()
+    await db_session.refresh(user)
+    return user
+
+
+@pytest_asyncio.fixture
+async def sample_user_2(db_session: AsyncSession):
+    """Create a second sample user for testing"""
+    from src.models import User
+    from src.auth.utils import get_password_hash
+    
+    user = User(
+        email="test2@example.com",
+        password_hash=get_password_hash("testpassword123")
+    )
+    db_session.add(user)
+    await db_session.commit()
+    await db_session.refresh(user)
+    return user
+
+
+@pytest_asyncio.fixture
+async def sample_project(db_session: AsyncSession, sample_user):
+    """Create a sample project for testing"""
+    from src.models import Project
+    
+    project = Project(
+        project_name="Test Project",
+        user_id=sample_user.user_id
+    )
+    db_session.add(project)
+    await db_session.commit()
+    await db_session.refresh(project)
+    return project
+
+
+@pytest_asyncio.fixture
+async def auth_headers(client: AsyncClient, sample_user):
+    """Get auth headers for sample user"""
+    response = await client.post("/api/v1/auth/token", data={
+        "username": sample_user.email,
+        "password": "testpassword123"
+    })
+    token = response.json()["access_token"]
+    return {"Authorization": f"Bearer {token}"}
+
+
+@pytest_asyncio.fixture
+async def auth_headers_2(client: AsyncClient, sample_user_2):
+    """Get auth headers for second sample user"""
+    response = await client.post("/api/v1/auth/token", data={
+        "username": sample_user_2.email,
+        "password": "testpassword123"
+    })
+    token = response.json()["access_token"]
+    return {"Authorization": f"Bearer {token}"}
