@@ -1,0 +1,21 @@
+<div class="main-layout">
+    <header class="main-header">
+        <div class="logo">RAG MCP Server</div>
+        <nav class="main-nav">
+            <a routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
+            <a routerLink="/projects" routerLinkActive="active">Projects</a>
+        </nav>
+        <div class="user-actions">
+            <span class="user-email" *ngIf="authService.user()">{{ authService.user()?.email }}</span>
+            <button class="logout-btn" (click)="logout()">Logout</button>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <router-outlet></router-outlet>
+    </main>
+
+    <footer class="main-footer">
+        <p>© 2025 RAG MCP Server</p>
+    </footer>
+</div>
