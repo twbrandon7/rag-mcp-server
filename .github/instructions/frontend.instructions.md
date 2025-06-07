@@ -163,6 +163,20 @@ Based on the [Angular Style Guide project structure recommendations](https://ang
 
 Following the [Angular Style Guide coding conventions](https://angular.dev/style-guide):
 
+### Generate with Angular CLI
+- **Use Angular CLI for generation**: Always generate components, services, and modules using the CLI to ensure consistent structure
+  ```bash
+  ng generate component user-profile
+  ng generate service auth
+  ```
+
+### Module is deprecated
+- **Avoid using `NgModule`**: Use standalone components and services instead of creating new modules
+- **Use `standalone: true`**: For components that do not require a module
+
+### Prefer root services
+- **Use root-level services**: Services should be provided in the root injector to ensure a single instance across the application
+
 ### Dependency Injection
 - **Prefer `inject()` function**: Use `inject()` over constructor parameter injection for better readability and type inference
 - **Group Angular properties first**: Inputs, outputs, queries, and lifecycle hooks before methods
