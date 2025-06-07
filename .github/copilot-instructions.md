@@ -1,6 +1,9 @@
 For the backend specific instructions, please refer to the following files:
 - [.github/instructions/backend.instructions.md](.github/instructions/backend.instructions.md)
 
+For the frontend specific instructions, please refer to the following files:
+- [.github/instructions/frontend.instructions.md](.github/instructions/frontend.instructions.md)
+
 ## Package management
 
 ### backend
