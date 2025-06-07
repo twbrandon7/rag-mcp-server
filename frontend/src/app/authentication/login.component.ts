@@ -1,8 +1,9 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
+import { Subject, switchMap, Subscription } from 'rxjs';
 
 import { AuthService } from '../core/auth.service';
 import { OAuthService } from './oauth.service';
@@ -23,39 +24,39 @@ import { LoadingSpinnerComponent } from '../shared/loading-spinner.component';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
 })
-export class LoginComponent {
-  private fb = inject(FormBuilder);
+export class LoginComponent implements OnInit, OnDestroy {
+  private formBuilder = inject(FormBuilder);
   private authService = inject(AuthService);
   private oauthService = inject(OAuthService);
   private router = inject(Router);
   
+  // Subject for login actions
+  private loginSubject = new Subject<{email: string, password: string}>();
+  private loginSubscription!: Subscription;
+
   // Form state
-  loginForm: FormGroup;
-  
+  readonly loginForm: FormGroup = this.formBuilder.group({
+    email: ['', [Validators.required, Validators.email]],
+    password: ['', [Validators.required, Validators.minLength(6)]]
+  });
+
   // Component state
-  isLoading = signal(false);
-  errorMsg = signal('');
-  
-  constructor() {
-    this.loginForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]]
-    });
-  }
-  
+  readonly isLoading = signal(false);
+  readonly errorMsg = signal('');
+
   // Form controls getters
   get email() { return this.loginForm.get('email'); }
   get password() { return this.loginForm.get('password'); }
-  
-  onSubmit(): void {
-    if (this.loginForm.invalid) return;
-    
-    this.isLoading.set(true);
-    this.errorMsg.set('');
-    
-    const { email, password } = this.loginForm.value;
-    
-    this.authService.login(email, password).subscribe({
+
+  ngOnInit(): void {
+    // Set up the login pipeline
+    this.loginSubscription = this.loginSubject.pipe(
+      switchMap(({ email, password }) => {
+        this.isLoading.set(true);
+        this.errorMsg.set('');
+        return this.authService.login(email, password);
+      })
+    ).subscribe({
       next: success => {
         this.isLoading.set(false);
         if (success) {
@@ -70,11 +71,24 @@ export class LoginComponent {
       }
     });
   }
-  
+
+  ngOnDestroy(): void {
+    // Complete the subject to clean up subscriptions
+    this.loginSubscription.unsubscribe();
+  }
+
+  onSubmit(): void {
+    if (this.loginForm.invalid) return;
+
+    const { email, password } = this.loginForm.value;
+    // Trigger the login subject with the form values
+    this.loginSubject.next({ email, password });
+  }
+
   loginWithGoogle(): void {
     this.oauthService.initiateGoogleLogin();
   }
-  
+
   loginWithMicrosoft(): void {
     this.oauthService.initiateMicrosoftLogin();
   }
