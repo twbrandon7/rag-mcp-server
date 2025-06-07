@@ -2,7 +2,6 @@
 from typing import Annotated
 
 from fastapi import APIRouter, Depends, status
-from fastapi.security import OAuth2PasswordRequestForm
 from sqlmodel import Session
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -17,15 +16,10 @@ router = APIRouter()
 
 @router.post("/token", response_model=Token)
 async def login_for_access_token(
-    form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
+    credentials: LoginCredentials,
     session: Annotated[AsyncSession, Depends(get_db)]
 ) -> Token:
     """Login with email and password to get access token."""
-    credentials = LoginCredentials(
-        email=form_data.username,  # OAuth2 form uses 'username' for email
-        password=form_data.password
-    )
-    
     # Authenticate user
     user = await authenticate_user(session, credentials)
     if not user:
