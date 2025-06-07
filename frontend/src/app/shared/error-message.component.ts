@@ -1,8 +1,10 @@
 import { Component, input } from '@angular/core';
+import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-error-message',
   standalone: true,
+  imports: [NgIf],
   template: `
     <div class="error-container" *ngIf="message()">
       {{ message() }}
