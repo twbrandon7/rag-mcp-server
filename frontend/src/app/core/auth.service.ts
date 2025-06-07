@@ -6,15 +6,15 @@ import { environment } from '../../environments/environment';
 import { jwtDecode } from 'jwt-decode';
 
 export interface User {
-  id: string;
+  user_id: string;
   email: string;
+  created_at: string;
   name?: string;
 }
 
 export interface AuthResponse {
   access_token: string;
   token_type: string;
-  user: User;
 }
 
 @Injectable({
@@ -37,7 +37,7 @@ export class AuthService {
   }
 
   login(email: string, password: string): Observable<boolean> {
-    return this.http.post<AuthResponse>(`${environment.authUrl}/login`, { email, password })
+    return this.http.post<AuthResponse>(`${environment.apiUrl}/auth/token`, { email, password })
       .pipe(
         tap(response => this.handleAuthSuccess(response)),
         map(() => true),
@@ -49,7 +49,7 @@ export class AuthService {
   }
 
   register(email: string, password: string): Observable<boolean> {
-    return this.http.post<AuthResponse>(`${environment.authUrl}/register`, { email, password })
+    return this.http.post<AuthResponse>(`${environment.apiUrl}/users`, { email, password })
       .pipe(
         tap(response => this.handleAuthSuccess(response)),
         map(() => true),
@@ -61,7 +61,7 @@ export class AuthService {
   }
 
   googleLogin(token: string): Observable<boolean> {
-    return this.http.post<AuthResponse>(`${environment.authUrl}/google`, { token })
+    return this.http.post<AuthResponse>(`${environment.apiUrl}/auth/google`, { token })
       .pipe(
         tap(response => this.handleAuthSuccess(response)),
         map(() => true),
@@ -73,7 +73,7 @@ export class AuthService {
   }
 
   microsoftLogin(token: string): Observable<boolean> {
-    return this.http.post<AuthResponse>(`${environment.authUrl}/microsoft`, { token })
+    return this.http.post<AuthResponse>(`${environment.apiUrl}/auth/microsoft`, { token })
       .pipe(
         tap(response => this.handleAuthSuccess(response)),
         map(() => true),
@@ -102,9 +102,10 @@ export class AuthService {
           // Token is valid
           this._isAuthenticated.set(true);
           this._user.set({
-            id: decoded.sub,
+            user_id: decoded.sub,
             email: decoded.email,
-            name: decoded.name
+            name: decoded.name,
+            created_at: decoded.created_at || new Date().toISOString()
           });
         } else {
           // Token expired
@@ -121,9 +122,34 @@ export class AuthService {
     return localStorage.getItem('access_token');
   }
 
+  getUser(): Observable<User> {
+    return this.http.get<User>(`${environment.apiUrl}/users/me`)
+      .pipe(
+        tap(user => this._user.set(user)),
+        catchError(error => {
+          console.error('Error fetching user info:', error);
+          this.logout();
+          throw error;
+        })
+      );
+  }
+
   private handleAuthSuccess(response: AuthResponse): void {
     localStorage.setItem('access_token', response.access_token);
-    this._user.set(response.user);
     this._isAuthenticated.set(true);
+    
+    // Extract user data from token
+    try {
+      const token = response.access_token;
+      const decoded: any = jwtDecode(token);
+      this._user.set({
+        user_id: decoded.sub,
+        email: decoded.email,
+        name: decoded.name,
+        created_at: decoded.created_at || new Date().toISOString()
+      });
+    } catch (error) {
+      console.error('Error decoding token:', error);
+    }
   }
 }

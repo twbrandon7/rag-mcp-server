@@ -7,7 +7,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const token = authService.getToken();
   
   // Skip interception for authentication endpoints
-  if (req.url.includes('/auth/login') || req.url.includes('/auth/register')) {
+  if (req.url.includes('/auth/token') || req.url.includes('/api/v1/users') && req.method === 'POST') {
     return next(req);
   }
 
