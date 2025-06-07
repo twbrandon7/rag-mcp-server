@@ -1,0 +1,27 @@
+<div class="dashboard-container">
+  <h1>Welcome to the Web Content Vectorization Service</h1>
+  
+  <div class="welcome-message" *ngIf="authService.user()">
+    <p>Hello, {{ authService.user()?.email }}!</p>
+  </div>
+  
+  <div class="dashboard-cards">
+    <div class="dashboard-card">
+      <h3>Projects</h3>
+      <p>Organize your content in projects</p>
+      <a routerLink="/projects" class="card-action">Manage Projects</a>
+    </div>
+    
+    <div class="dashboard-card">
+      <h3>URL Processing</h3>
+      <p>Submit URLs for crawling and vectorization</p>
+      <a routerLink="/url-processing" class="card-action">Process URLs</a>
+    </div>
+    
+    <div class="dashboard-card">
+      <h3>Content Search</h3>
+      <p>Search through your vectorized content</p>
+      <a routerLink="/content" class="card-action">Explore Content</a>
+    </div>
+  </div>
+</div>
