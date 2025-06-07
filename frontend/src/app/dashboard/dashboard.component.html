@@ -1,8 +1,8 @@
 <div class="dashboard-container">
   <h1>Welcome to the Web Content Vectorization Service</h1>
   
-  <div class="welcome-message" *ngIf="authService.user()">
-    <p>Hello, {{ authService.user()?.email }}!</p>
+  <div class="welcome-message" *ngIf="userEmail()">
+    <p>Hello, {{ userEmail() }}!</p>
   </div>
   
   <div class="dashboard-cards">

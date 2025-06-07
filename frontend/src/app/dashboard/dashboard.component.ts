@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../core/auth.service';
@@ -11,5 +11,6 @@ import { AuthService } from '../core/auth.service';
   styleUrls: ['./dashboard.component.scss']
 })
 export class MainDashboardComponent {
-  protected authService = inject(AuthService);
+  private authService = inject(AuthService);
+  readonly userEmail = computed<string | null>(() => this.authService.user()?.email ?? null);
 }
