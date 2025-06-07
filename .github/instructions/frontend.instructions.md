@@ -185,4 +185,71 @@ Following the [Angular Style Guide coding conventions](https://angular.dev/style
 - **Consistent file organization**: Maintain the same structure across all feature modules
 - **Clear separation of concerns**: Components for presentation, services for business logic, modules for organization
 
+### Prefer Signal and Observable Patterns
+
+Try not to declare "bare" variables in components or services. Instead, use Angular's reactive patterns with Signals and Observables for better reactivity and performance.
+```typescript
+readonly variableName1 = signal<Type>(initialValue); // ✅ Use Signals for reactive state
+variableName2: Type = ...; // ❌ Avoid bare variables
+
+variableName3$ = this.someService.getData(); // ✅ Use Observables for async data streams
+variableName3: Type = ...; // ❌ Avoid bare variables
+```
+
+#### When to Use Signals vs Observables
+
+**Use Signals for:**
+- Template variables and component state
+- Conditional logic: "if X has value Y, then Z"
+- Synchronous reactive values with current state
+
+**Use Observables for:**
+- Time-based operations: "when...", "after...", "until...", "every N seconds..."
+- Asynchronous data streams (HTTP, WebSocket, events)
+- Complex async workflows with chaining/merging
+
+#### Signal Guidelines
+
+**Templates:** Always use Signals over Observables - better performance, no pipes needed, glitch-free.
+
+**`computed()`:** Use liberally for declarative code. Must be pure functions:
+- ❌ No side effects, DOM manipulation, or async operations
+- ✅ Only compute and return new values
+
+**`effect()`:** Use sparingly. Keep small and safe:
+```typescript
+effect(() => {
+  const value = this.signal();
+  untracked(() => {
+    // Side effects here
+    this.doSomething(value);
+  });
+});
+```
+
+#### Mixing Patterns
+
+**Convert types:**
+- Observable → Signal: `toSignal(observable$)` 
+- Signal → Observable: Use join operators in pipes
+
+**Read Signals in Observables:**
+- For reactivity: Convert to Observable first
+- For current value: Read directly (no `untracked()` needed)
+
+**Service architecture:**
+```typescript
+@Injectable()
+export class DataService {
+  private _data = signal<Data[]>([]);
+  readonly data = this._data.asReadonly();
+  
+  loadData(): Observable<Data[]> {
+    return this.http.get<Data[]>('/api/data').pipe(
+      tap(data => this._data.set(data))
+    );
+  }
+}
+```
+
 This structure supports the application's requirements for user authentication, project management, URL processing, and data visualization while strictly adhering to Angular best practices for scalability and maintainability.
