@@ -21,21 +21,17 @@ services:
     # security_opt:
     #   - seccomp:unconfined
 
+    user: "1000"
+
+    ports:
+      - "8000:8000"
+      - "5173:5173"
+
     # Overrides default command so things don't shut down after the process ends.
     command: sleep infinity
   
   frontend:
-    # Uncomment if you want to override the service's Dockerfile to one in the .devcontainer 
-    # folder. Note that the path of the Dockerfile and context is relative to the *primary* 
-    # docker-compose.yml file (the first in the devcontainer.json "dockerComposeFile"
-    # array). The sample below assumes your primary file is in the root of your project.
-    #
-    build:
-      context: .
-      dockerfile: .devcontainer/Dockerfile.frontend
-
-    volumes:
-      # Update this to wherever you want VS Code to mount the folder of your project
-      - ./frontend:/app:cached
-
-    command: ng serve --host 0.0.0.0 --port 80 --disable-host-check
+    # Disable the frontend service to avoid conflicts with the backend service in the development mode.
+    image: busybox:latest
+    deploy:
+      replicas: 0
