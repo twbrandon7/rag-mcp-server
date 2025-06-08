@@ -160,7 +160,18 @@ async def test_get_urls_in_project(authenticated_client, db_session):
     assert response.status_code == status.HTTP_200_OK
     data = response.json()
     assert len(data) == 1
-    assert data[0]["url_id"] == str(test_url.url_id)
+    
+    url_data = data[0]
+    # Verify all required fields are present according to API spec
+    expected_fields = ["url_id", "project_id", "original_url", "status", "failure_reason", "submitted_at", "last_updated_at"]
+    for field in expected_fields:
+        assert field in url_data, f"Missing field: {field}"
+    
+    # Verify field values
+    assert url_data["url_id"] == str(test_url.url_id)
+    assert url_data["project_id"] == str(test_url.project_id)
+    assert url_data["original_url"] == test_url.original_url
+    assert url_data["status"] == test_url.status
 
 
 async def test_get_url_status(authenticated_client, db_session):

@@ -33,15 +33,26 @@ async def get_url_by_id(session: AsyncSession, url_id: UUID4, project_id: UUID4)
 
 async def get_urls_by_project(session: AsyncSession, project_id: UUID4, status: Optional[str] = None) -> List[Dict[str, Any]]:
     """Get all URLs in a project, optionally filtering by status."""
-    query = select(URL.url_id, URL.last_updated_at).where(URL.project_id == project_id)
+    query = select(URL).where(URL.project_id == project_id)
     
     if status:
         query = query.where(URL.status == status)
         
     result = await session.execute(query)
-    urls = result.all()
+    urls = result.scalars().all()
     
-    return [{"url_id": url.url_id, "last_updated_at": url.last_updated_at} for url in urls]
+    return [
+        {
+            "url_id": url.url_id,
+            "project_id": url.project_id,
+            "original_url": url.original_url,
+            "status": url.status,
+            "failure_reason": url.failure_reason,
+            "submitted_at": url.submitted_at,
+            "last_updated_at": url.last_updated_at
+        }
+        for url in urls
+    ]
 
 
 async def create_url(session: AsyncSession, project_id: UUID4, original_url: str) -> Dict[str, Any]:

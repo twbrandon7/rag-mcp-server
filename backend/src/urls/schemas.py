@@ -30,9 +30,13 @@ class URLResponse(URLBase):
     last_updated_at: datetime
 
 
-class URLListResponse(BaseModel):
+class URLListResponse(URLBase):
     """Schema for a URL in list response."""
     url_id: UUID4
+    project_id: UUID4
+    status: str
+    failure_reason: Optional[str] = None
+    submitted_at: datetime
     last_updated_at: datetime
 
 

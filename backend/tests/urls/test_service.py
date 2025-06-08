@@ -83,7 +83,18 @@ async def test_get_urls_by_project(test_project, test_url, db_session):
     )
     
     assert len(urls) == 1
-    assert urls[0]["url_id"] == test_url.url_id
+    url_data = urls[0]
+    
+    # Verify all required fields are present according to API spec
+    expected_fields = ["url_id", "project_id", "original_url", "status", "failure_reason", "submitted_at", "last_updated_at"]
+    for field in expected_fields:
+        assert field in url_data, f"Missing field: {field}"
+    
+    # Verify field values
+    assert url_data["url_id"] == test_url.url_id
+    assert url_data["project_id"] == test_url.project_id
+    assert url_data["original_url"] == test_url.original_url
+    assert url_data["status"] == test_url.status
 
 
 async def test_create_url(test_project, db_session):
