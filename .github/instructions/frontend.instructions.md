@@ -17,60 +17,24 @@ frontend/
 │   │   │   ├── api.service.ts
 │   │   │   └── core.module.ts
 │   │   ├── shared/                 # Reusable components, pipes, directives
-│   │   │   ├── loading-spinner.component.ts
-│   │   │   ├── loading-spinner.component.html
-│   │   │   ├── status-badge.component.ts
-│   │   │   ├── error-message.component.ts
-│   │   │   ├── status-display.pipe.ts
-│   │   │   └── shared.module.ts
 │   │   ├── authentication/         # User login and registration
-│   │   │   ├── login.component.ts
-│   │   │   ├── login.component.html
-│   │   │   ├── register.component.ts
-│   │   │   ├── oauth-callback.component.ts
-│   │   │   ├── oauth.service.ts
-│   │   │   ├── authentication-routing.module.ts
-│   │   │   └── authentication.module.ts
-│   │   ├── projects/               # Project management
-│   │   │   ├── project-list.component.ts
-│   │   │   ├── project-detail.component.ts
-│   │   │   ├── create-project.component.ts
-│   │   │   ├── project-card.component.ts
-│   │   │   ├── project.service.ts
+│   │   ├── projects/
+│   │   │   ├── create-project/
+│   │   │   │   ├── create-project.component.html
+│   │   │   │   ├── create-project.component.scss
+│   │   │   │   ├── create-project.component.spec.ts
+│   │   │   │   └── create-project.component.ts
+│   │   │   ├── project-card/
+│   │   │   ├── project-detail/
+│   │   │   ├── project-list/
 │   │   │   ├── project.model.ts
-│   │   │   ├── projects-routing.module.ts
-│   │   │   └── projects.module.ts
+│   │   │   ├── project.service.spec.ts
+│   │   │   ├── project.service.ts
+│   │   │   └── projects.routes.ts
 │   │   ├── url-processing/         # URL submission and status tracking
-│   │   │   ├── single-url-form.component.ts
-│   │   │   ├── bulk-url-form.component.ts
-│   │   │   ├── url-list.component.ts
-│   │   │   ├── processing-dashboard.component.ts
-│   │   │   ├── url-processing.service.ts
-│   │   │   ├── websocket.service.ts
-│   │   │   ├── url-submission.model.ts
-│   │   │   ├── url-processing-routing.module.ts
-│   │   │   └── url-processing.module.ts
 │   │   ├── content/                # Data viewing and search
-│   │   │   ├── content-viewer.component.ts
-│   │   │   ├── vector-search.component.ts
-│   │   │   ├── project-sharing.component.ts
-│   │   │   ├── content.service.ts
-│   │   │   ├── search.service.ts
-│   │   │   ├── content.model.ts
-│   │   │   ├── content-routing.module.ts
-│   │   │   └── content.module.ts
 │   │   ├── dashboard/              # Main navigation and overview
-│   │   │   ├── main-dashboard.component.ts
-│   │   │   ├── sidebar.component.ts
-│   │   │   ├── header.component.ts
-│   │   │   ├── user-profile.component.ts
-│   │   │   ├── dashboard-routing.module.ts
-│   │   │   └── dashboard.module.ts
 │   │   ├── layout/                 # Application layouts
-│   │   │   ├── main-layout.component.ts
-│   │   │   ├── main-layout.component.html
-│   │   │   ├── auth-layout.component.ts
-│   │   │   └── auth-layout.component.html
 │   │   ├── app-routing.module.ts
 │   │   ├── app.component.ts
 │   │   ├── app.component.html
