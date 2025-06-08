@@ -62,6 +62,24 @@ applyTo: 'frontend/**/*.component.ts,frontend/**/*.service.ts'
   ```
 
 ## Components
+- Prefer `input()` and `output()` over the traditional `@Input()` and `@Output()` decorators.
+  ```typescript
+  @Component({
+    selector: 'app-project',
+    templateUrl: './project.component.html',
+    styleUrls: ['./project.component.css']
+  })
+  export class ProjectComponent {
+    // Avoid using @Input and @Output
+    @input() projectId!: string;
+    @output() projectUpdated = new EventEmitter<ProjectResponse>();
+
+    // Prefer using input() and output()
+    @input() projectId!: string;
+    @output() projectUpdated = new EventEmitter<ProjectResponse>();
+  }
+  ```
+
 - Avoid using subscribe in components if possible. Instead, convert observables to signals using `toSignal`. Angular will handle the lifecycle of the signal automatically.
   ```typescript
   // Avoid this
