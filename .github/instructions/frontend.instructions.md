@@ -127,4 +127,26 @@ Based on the [Angular Style Guide project structure recommendations](https://ang
 - Each feature has dedicated routing module for granular route control
 - Core module loaded once, shared modules imported where needed
 
+## Angular Coding Standards
+
+### Prefer root services
+- **Use root-level services**: Services should be provided in the root injector to ensure a single instance across the application
+
+### Dependency Injection
+- **Prefer `inject()` function**: Use `inject()` over constructor parameter injection for better readability and type inference
+- **Group Angular properties first**: Inputs, outputs, queries, and lifecycle hooks before methods
+
+### Component Standards
+- **Protected for template-only members**: Use `protected` for class members only accessed by templates
+- **Readonly for Angular-initialized properties**: Mark `input()`, `output()`, and query properties as `readonly`
+- **Meaningful event handler names**: Name handlers for what they do, not the triggering event
+  - Prefer: `saveUserData()` over `handleClick()`
+- **Simple lifecycle methods**: Keep lifecycle hooks simple, delegate complex logic to well-named methods
+- **Implement lifecycle interfaces**: Use TypeScript interfaces (`OnInit`, `OnDestroy`) for type safety
+
+### Template Best Practices
+- **Prefer `class` and `style` bindings**: Use direct bindings over `ngClass` and `ngStyle` for better performance
+- **Avoid complex template logic**: Move complex logic to TypeScript code, use computed signals for derived values
+- **Focus on presentation**: Keep components focused on UI, move business logic to services
+
 This structure supports the application's requirements for user authentication, project management, URL processing, and data visualization while strictly adhering to Angular best practices for scalability and maintainability.
