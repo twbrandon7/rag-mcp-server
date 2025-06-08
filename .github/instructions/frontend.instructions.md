@@ -1,5 +1,5 @@
 ---
-applyTo: 'frontend/**'
+applyTo: 'frontend/**/*.ts,frontend/**/*.html,frontend/**/*.scss'
 ---
 ## Project Structure
 
