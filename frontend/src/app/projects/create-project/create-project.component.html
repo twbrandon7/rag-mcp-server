@@ -1,0 +1,54 @@
+<div class="create-project-container">
+  <div class="header">
+    <h2 class="title">Create New Project</h2>
+    <p class="subtitle">Create a project to organize your links and vectorized content</p>
+  </div>
+
+  <!-- Error message -->
+  @if (error()) {
+    <div class="alert alert-error">
+      {{ error() }}
+    </div>
+  }
+
+  <form class="create-form" (ngSubmit)="createProject()">
+    <div class="form-group">
+      <label for="projectName">Project Name *</label>
+      <input
+        id="projectName"
+        type="text"
+        class="form-control"
+        [(ngModel)]="projectName"
+        name="projectName"
+        placeholder="Enter a descriptive name for your project"
+        [disabled]="isLoading()"
+        maxlength="255"
+        required
+        autofocus>
+      <small class="form-hint">
+        Choose a name that helps you identify this project's purpose (max 255 characters)
+      </small>
+    </div>
+
+    <div class="form-actions">
+      <button
+        type="submit"
+        class="btn btn-primary"
+        [disabled]="!projectName().trim() || isLoading()">
+        @if (isLoading()) {
+          <span class="spinner"></span>
+          Creating...
+        } @else {
+          Create Project
+        }
+      </button>
+      <button
+        type="button"
+        class="btn btn-secondary"
+        (click)="cancel()"
+        [disabled]="isLoading()">
+        Cancel
+      </button>
+    </div>
+  </form>
+</div>

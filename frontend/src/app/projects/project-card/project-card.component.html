@@ -1,0 +1,18 @@
+<div class="project-card" (click)="selectProject()">
+  <div class="project-header">
+    <h3 class="project-name">{{ project()?.project_name }}</h3>
+    <p-button
+      icon="pi pi-times"
+      size="small"
+      severity="danger"
+      (onClick)="deleteProject($event)"
+      [title]="'Delete project'"
+      [text]="true">
+    </p-button>
+  </div>
+  <div class="project-meta">
+    <span class="created-date">
+      Created: {{ project()?.created_at | date:'short' }}
+    </span>
+  </div>
+</div>

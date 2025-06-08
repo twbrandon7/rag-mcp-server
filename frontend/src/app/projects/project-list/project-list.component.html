@@ -1,0 +1,53 @@
+<div class="project-list-container">
+  <div class="header">
+    <h2 class="title">My Projects</h2>
+    <a 
+      class="btn btn-primary"
+      routerLink="/dashboard/projects/create"
+      [class.disabled]="isLoading()">
+      Create New Project
+    </a>
+  </div>
+
+  <!-- Error message -->
+  @if (error()) {
+    <div class="alert alert-error">
+      {{ error() }}
+    </div>
+  }
+
+  <!-- Loading state -->
+  @if (isLoading()) {
+    <div class="loading">
+      <div class="spinner"></div>
+      <p>Loading projects...</p>
+    </div>
+  }
+
+  <!-- Projects list -->
+  @if (!isLoading()) {
+    @if (hasProjects()) {
+      <div class="projects-grid">
+        @for (project of projects(); track project.project_id) {
+          <app-project-card 
+            [project]="project"
+            (select)="selectProject($event)"
+            (delete)="deleteProject($event)">
+          </app-project-card>
+        }
+      </div>
+    } @else {
+      <div class="empty-state">
+        <div class="empty-icon">📁</div>
+        <h3>No Projects Yet</h3>
+        <p>Create your first project to start organizing your links and content.</p>
+        <button
+          class="btn btn-primary"
+          routerLink="/dashboard/projects/create"
+          [class.disabled]="isLoading()">
+          Create Your First Project
+        </button>
+      </div>
+    }
+  }
+</div>
