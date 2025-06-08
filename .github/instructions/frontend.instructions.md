@@ -79,11 +79,6 @@ Strictly following the [Angular Style Guide naming conventions](https://angular.
   - Component selector: `app-user-profile`
   - Directive selector: `[appTooltip]` (camelCase for attributes)
 
-### Module Naming
-- **Feature modules**: `[feature-name].module.ts`
-- **Routing modules**: `[feature-name]-routing.module.ts`
-- **Avoid generic names**: No `helpers.ts`, `utils.ts`, or `common.ts`
-
 ## Project Organization Principles
 
 Based on the [Angular Style Guide project structure recommendations](https://angular.dev/style-guide#project-structure):
@@ -94,12 +89,21 @@ Based on the [Angular Style Guide project structure recommendations](https://ang
 - **One concept per file**: Focus each file on a single concept (one component, service, or directive per file)
 - **Organize by feature areas**: Structure by business features, not file types
 - **Avoid excessive nesting**: Keep directory structure manageable and navigable
+- **Module is deprecated**: Do not use modules any more; instead, use standalone components and root services where possible.
 
 ### Directory Organization
 - **Feature-based structure**: Each business feature has its own directory
 - **Flat when possible**: Avoid unnecessary subdirectories that make navigation difficult
 - **Group related files**: Keep components with their templates and styles together
 - **Manageable directory sizes**: Split into sub-directories only when a folder becomes hard to navigate
+
+### Always use Angular CLI to generate code
+- Use Angular CLI commands to generate components, services, and other artifacts to ensure consistent structure and naming.
+  ```bash
+  ng generate component projects/create-project --standalone
+  ng generate service authentication/auth
+  ```
+- Note: never generate modules, as they are deprecated in the latest Angular versions.
 
 ### Core vs Shared vs Features
 - **Core**: Singleton services, guards, interceptors (imported once in AppModule)
@@ -122,112 +126,5 @@ Based on the [Angular Style Guide project structure recommendations](https://ang
 - Feature modules designed for lazy loading to optimize initial bundle size
 - Each feature has dedicated routing module for granular route control
 - Core module loaded once, shared modules imported where needed
-
-## Angular Coding Standards
-
-Following the [Angular Style Guide coding conventions](https://angular.dev/style-guide):
-
-### Generate with Angular CLI
-- **Use Angular CLI for generation**: Always generate components, services, and modules using the CLI to ensure consistent structure
-  ```bash
-  ng generate component user-profile
-  ng generate service auth
-  ```
-
-### Module is deprecated
-- **Avoid using `NgModule`**: Use standalone components and services instead of creating new modules
-- **Use `standalone: true`**: For components that do not require a module
-
-### Prefer root services
-- **Use root-level services**: Services should be provided in the root injector to ensure a single instance across the application
-
-### Dependency Injection
-- **Prefer `inject()` function**: Use `inject()` over constructor parameter injection for better readability and type inference
-- **Group Angular properties first**: Inputs, outputs, queries, and lifecycle hooks before methods
-
-### Component Standards
-- **Protected for template-only members**: Use `protected` for class members only accessed by templates
-- **Readonly for Angular-initialized properties**: Mark `input()`, `output()`, and query properties as `readonly`
-- **Meaningful event handler names**: Name handlers for what they do, not the triggering event
-  - Prefer: `saveUserData()` over `handleClick()`
-- **Simple lifecycle methods**: Keep lifecycle hooks simple, delegate complex logic to well-named methods
-- **Implement lifecycle interfaces**: Use TypeScript interfaces (`OnInit`, `OnDestroy`) for type safety
-
-### Template Best Practices
-- **Prefer `class` and `style` bindings**: Use direct bindings over `ngClass` and `ngStyle` for better performance
-- **Avoid complex template logic**: Move complex logic to TypeScript code, use computed signals for derived values
-- **Focus on presentation**: Keep components focused on UI, move business logic to services
-
-### Code Organization
-- **Group closely related files**: Keep component files (TS, HTML, CSS, spec) in the same directory when they form a cohesive unit
-- **Consistent file organization**: Maintain the same structure across all feature modules
-- **Clear separation of concerns**: Components for presentation, services for business logic, modules for organization
-
-### Prefer Signal and Observable Patterns
-
-Try not to declare "bare" variables in components or services. Instead, use Angular's reactive patterns with Signals and Observables for better reactivity and performance.
-```typescript
-readonly variableName1 = signal<Type>(initialValue); // ✅ Use Signals for reactive state
-variableName2: Type = ...; // ❌ Avoid bare variables
-
-variableName3$ = this.someService.getData(); // ✅ Use Observables for async data streams
-variableName3: Type = ...; // ❌ Avoid bare variables
-```
-
-#### When to Use Signals vs Observables
-
-**Use Signals for:**
-- Template variables and component state
-- Conditional logic: "if X has value Y, then Z"
-- Synchronous reactive values with current state
-
-**Use Observables for:**
-- Time-based operations: "when...", "after...", "until...", "every N seconds..."
-- Asynchronous data streams (HTTP, WebSocket, events)
-- Complex async workflows with chaining/merging
-
-#### Signal Guidelines
-
-**Templates:** Always use Signals over Observables - better performance, no pipes needed, glitch-free.
-
-**`computed()`:** Use liberally for declarative code. Must be pure functions:
-- ❌ No side effects, DOM manipulation, or async operations
-- ✅ Only compute and return new values
-
-**`effect()`:** Use sparingly. Keep small and safe:
-```typescript
-effect(() => {
-  const value = this.signal();
-  untracked(() => {
-    // Side effects here
-    this.doSomething(value);
-  });
-});
-```
-
-#### Mixing Patterns
-
-**Convert types:**
-- Observable → Signal: `toSignal(observable$)` 
-- Signal → Observable: Use join operators in pipes
-
-**Read Signals in Observables:**
-- For reactivity: Convert to Observable first
-- For current value: Read directly (no `untracked()` needed)
-
-**Service architecture:**
-```typescript
-@Injectable()
-export class DataService {
-  private _data = signal<Data[]>([]);
-  readonly data = this._data.asReadonly();
-  
-  loadData(): Observable<Data[]> {
-    return this.http.get<Data[]>('/api/data').pipe(
-      tap(data => this._data.set(data))
-    );
-  }
-}
-```
 
 This structure supports the application's requirements for user authentication, project management, URL processing, and data visualization while strictly adhering to Angular best practices for scalability and maintainability.
