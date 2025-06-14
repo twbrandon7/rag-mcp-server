@@ -174,3 +174,15 @@ async def reprocess_url(session: AsyncSession, url_id: UUID4, project_id: UUID4)
         "submitted_at": url.submitted_at,
         "last_updated_at": url.last_updated_at
     }
+
+
+async def delete_url(session: AsyncSession, url_id: UUID4, project_id: UUID4) -> None:
+    """Delete a URL from a project."""
+    # Get the URL first to ensure it exists and belongs to the project
+    query = select(URL).where(and_(URL.url_id == url_id, URL.project_id == project_id))
+    result = await session.execute(query)
+    url = result.scalars().first()
+    
+    if url:
+        await session.delete(url)
+        await session.commit()

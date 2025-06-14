@@ -141,3 +141,23 @@ async def reprocess_url(
     """
     url = await service.reprocess_url(session=session, url_id=url_id, project_id=project_id)
     return url
+
+
+@router.delete(
+    "/{project_id}/urls/{url_id}",
+    status_code=status.HTTP_204_NO_CONTENT,
+    summary="Delete URL",
+    description="Delete a URL from a project."
+)
+async def delete_url(
+    url = Depends(get_url_or_404),
+    project_id: UUID4 = Path(..., description="The ID of the project"),
+    url_id: UUID4 = Path(..., description="The ID of the URL to delete"),
+    session: AsyncSession = Depends(get_db),
+):
+    """
+    Delete a URL from a project.
+    
+    This will permanently remove the URL and all associated data.
+    """
+    await service.delete_url(session=session, url_id=url_id, project_id=project_id)
