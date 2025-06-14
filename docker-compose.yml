@@ -59,6 +59,18 @@ services:
       context: ./frontend
       args:
         - NODE_ENV=production
+  
+  rabbitmq:
+    image: rabbitmq:4.1.1-alpine
+    restart: always
+    networks:
+      - default
+    environment:
+      - RABBITMQ_DEFAULT_USER=${RABBITMQ_DEFAULT_USER?Variable not set}
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS?Variable not set}
+    ports:
+      - "5672:5672"
+      - "15672:15672"
 
 volumes:
   app-db-data:

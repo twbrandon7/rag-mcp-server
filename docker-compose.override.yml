@@ -38,3 +38,7 @@ services:
       context: ./frontend
       args:
         - NODE_ENV=development
+  
+  rabbitmq:
+    image: rabbitmq:4.1.1-management-alpine
+    restart: no
