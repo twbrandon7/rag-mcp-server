@@ -1,0 +1,56 @@
+.url-management-dashboard {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.dashboard-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.dashboard-header h2 {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+.dashboard-description {
+  font-size: 1.1rem;
+  color: #6c757d;
+  margin-bottom: 0;
+}
+
+.dashboard-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.submission-section {
+  order: 1;
+}
+
+.list-section {
+  order: 2;
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .url-management-dashboard {
+    padding: 1rem;
+  }
+
+  .dashboard-header h2 {
+    font-size: 1.5rem;
+  }
+
+  .dashboard-description {
+    font-size: 1rem;
+  }
+
+  .dashboard-content {
+    gap: 1.5rem;
+  }
+}

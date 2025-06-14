@@ -15,5 +15,9 @@ export const projectRoutes: Routes = [
   {
     path: ':id',
     component: ProjectDetailComponent
+  },
+  {
+    path: ':id/urls',
+    loadChildren: () => import('../url-management/url-management.routes').then(m => m.URL_MANAGEMENT_ROUTES)
   }
 ];

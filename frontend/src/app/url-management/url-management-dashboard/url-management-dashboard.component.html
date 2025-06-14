@@ -1,0 +1,27 @@
+<div class="url-management-dashboard">
+  <div class="dashboard-header">
+    <h2>URL Management</h2>
+    <p class="dashboard-description">
+      Submit URLs to be processed and track their status in real-time.
+    </p>
+  </div>
+
+  <div class="dashboard-content">
+    <!-- URL Submission Section -->
+    <section class="submission-section">
+      <app-url-submission
+        [projectId]="projectId()"
+        (urlSubmitted)="onUrlSubmitted()"
+        (batchSubmitted)="onBatchSubmitted()"
+        (submissionError)="onSubmissionError($event)"
+      ></app-url-submission>
+    </section>
+
+    <!-- URL List Section -->
+    <section class="list-section">
+      <app-url-list
+        [projectId]="projectId()"
+      ></app-url-list>
+    </section>
+  </div>
+</div>

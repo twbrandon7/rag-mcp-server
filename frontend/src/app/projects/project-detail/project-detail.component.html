@@ -90,11 +90,14 @@
         <div class="section">
           <h3 class="section-title">URLs & Content</h3>
           <div class="section-content">
-            <p class="placeholder-text">
-              URL processing and content management will be available here.
+            <p class="section-description">
+              Submit URLs for crawling and vectorization. Track processing status in real-time.
             </p>
-            <button class="btn btn-primary" disabled>
-              Add URLs (Coming Soon)
+            <button 
+              class="btn btn-primary" 
+              [routerLink]="['/dashboard/projects', project()!.project_id, 'urls']"
+              [disabled]="isLoading()">
+              Manage URLs
             </button>
           </div>
         </div>

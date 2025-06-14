@@ -1,0 +1,136 @@
+<div class="url-list-container">
+  <div class="list-header">
+    <div class="header-title">
+      <h3>URLs in Project</h3>
+      @if (totalUrlCount() > 0) {
+        <span class="url-count badge">{{ totalUrlCount() }} URLs</span>
+      }
+    </div>
+    
+    <div class="header-actions">
+      <button 
+        type="button" 
+        class="btn btn-sm btn-outline-primary"
+        (click)="onRefresh()"
+        [disabled]="isLoading()"
+      >
+        @if (isLoading()) {
+          <span class="spinner-border spinner-border-sm me-1"></span>
+        }
+        Refresh
+      </button>
+    </div>
+  </div>
+
+  <!-- Status Filter -->
+  <div class="status-filters">
+    <div class="filter-label">Filter by status:</div>
+    <div class="filter-buttons">
+      @for (status of statusFilters; track status) {
+        <button
+          type="button"
+          class="btn btn-sm filter-btn"
+          [class.active]="currentFilter() === status"
+          (click)="onFilterChange(status)"
+        >
+          {{ getStatusDisplayName(status) }}
+          @if (status && urlCountByStatus()[status]) {
+            <span class="count">({{ urlCountByStatus()[status] }})</span>
+          } @else if (!status && totalUrlCount() > 0) {
+            <span class="count">({{ totalUrlCount() }})</span>
+          }
+        </button>
+      }
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  @if (isLoading()) {
+    <div class="loading-container">
+      <div class="spinner-border" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+      <p>Loading URLs...</p>
+    </div>
+  }
+
+  <!-- Error State -->
+  @if (error() && !isLoading()) {
+    <div class="alert alert-danger">
+      <h5>Error Loading URLs</h5>
+      <p>{{ error().message || 'An error occurred while loading URLs' }}</p>
+      <button type="button" class="btn btn-sm btn-outline-danger" (click)="onRefresh()">
+        Try Again
+      </button>
+    </div>
+  }
+
+  <!-- Empty State -->
+  @if (!isLoading() && !error() && !hasUrls()) {
+    <div class="empty-state">
+      <div class="empty-icon">🔗</div>
+      <h4>No URLs Found</h4>
+      <p>No URLs have been submitted to this project yet.</p>
+    </div>
+  }
+
+  <!-- URL List -->
+  @if (!isLoading() && !error() && hasUrls()) {
+    <div class="url-table-container">
+      <table class="url-table">
+        <thead>
+          <tr>
+            <th>URL</th>
+            <th>Status</th>
+            <th>Submitted</th>
+            <th>Last Updated</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (url of urls(); track url.url_id) {
+            <tr class="url-row">
+              <td class="url-cell">
+                <div class="url-info">
+                  <a 
+                    [href]="url.original_url" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    class="url-link"
+                    [title]="url.original_url"
+                  >
+                    {{ truncateUrl(url.original_url, 60) }}
+                  </a>
+                  @if (url.failure_reason) {
+                    <div class="failure-reason">
+                      <small class="text-danger">{{ url.failure_reason }}</small>
+                    </div>
+                  }
+                </div>
+              </td>
+              <td class="status-cell">
+                <app-url-status [status]="url.status"></app-url-status>
+              </td>
+              <td class="date-cell">
+                <small>{{ formatDate(url.submitted_at) }}</small>
+              </td>
+              <td class="date-cell">
+                <small>{{ formatDate(url.last_updated_at) }}</small>
+              </td>
+              <td class="actions-cell">
+                <button
+                  type="button"
+                  class="btn btn-sm btn-outline-secondary"
+                  [title]="'Delete URL ' + url.original_url"
+                  (click)="onDeleteUrl(url.url_id)"
+                >
+                  <i class="pi pi-trash"></i>
+                </button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>

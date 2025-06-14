@@ -1,0 +1,51 @@
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+  border: 1px solid;
+}
+
+.status-icon {
+  font-size: 0.875rem;
+}
+
+.status-label {
+  line-height: 1;
+}
+
+// Status-specific styles
+.status-pending {
+  background-color: #fff3cd;
+  border-color: #ffd43b;
+  color: #664d03;
+}
+
+.status-crawling {
+  background-color: #cff4fc;
+  border-color: #9eeaf9;
+  color: #055160;
+}
+
+.status-encoding {
+  background-color: #e2e3e5;
+  border-color: #c4c8cc;
+  color: #41464b;
+}
+
+.status-stored {
+  background-color: #d1e7dd;
+  border-color: #a3cfbb;
+  color: #0f5132;
+}
+
+.status-failed {
+  background-color: #f8d7da;
+  border-color: #f1aeb5;
+  color: #58151c;
+}
